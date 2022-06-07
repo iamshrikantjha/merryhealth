@@ -6,6 +6,7 @@ import {useTranslation} from 'react-i18next';
 import { getLanguage } from "./../../redux"
 import i18n from './../../localization/i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const LoginScreen = () => {
 
