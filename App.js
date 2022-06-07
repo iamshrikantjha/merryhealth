@@ -1,10 +1,79 @@
-import React from 'react'
-import Router from './src/router'
+import React, {useEffect} from 'react';
+import {View, Text, Button} from 'react-native';
+import Router from './src/router';
+import {useTranslation} from 'react-i18next';
+import i18n from './src/localization/i18n';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const initI18n = i18n;
 
 const App = () => {
-  return (
-    <Router />
-  )
-}
+  const {t, i18n} = useTranslation();
 
-export default App
+  
+
+  const storeData = async value => {
+    try {
+      await AsyncStorage.setItem('@storage_Key', value);
+    } catch (e) {
+      // saving error
+      console.log('Store value error', e);
+    }
+  };
+
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@storage_Key');
+      if (value !== null) {
+        // value previously stored
+        console.log('This is current language', value);
+        i18n.changeLanguage(value);
+      }
+    } catch (e) {
+      // error reading value
+      console.log('No async store value', e);
+      console.log('get value error', e);
+    }
+  };
+
+  useEffect(() => {
+    console.log('Use effect started');
+    getData()
+  }, []);
+
+
+  return (
+    // <Router />
+    <View>
+      <Text>{t('Hey Yo Im at home')}</Text>
+      <Button
+        title={'en'}
+        onPress={() => {
+          i18n.changeLanguage('en');
+          console.log('en start');
+          storeData('en')
+        }}
+      />
+      <Button
+        title={'es'}
+        onPress={() => {
+          i18n.changeLanguage('es');
+          console.log('es start');
+          storeData('es')
+
+        }}
+      />
+      <Button
+        title={'de'}
+        onPress={() => {
+          i18n.changeLanguage('de');
+          console.log('de start');
+          storeData('de')
+        }}
+      />
+    </View>
+  );
+};
+
+export default App;
